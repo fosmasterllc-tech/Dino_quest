@@ -1,1 +1,567 @@
+HTML
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>DINO SPACE QUEST — Birthday Mission</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+:root {
+  --black:#000005; --aqua:#00F5FF; --aqua2:#00AACC; --aqua3:#003344;
+  --green:#00FF41; --yellow:#FFD700; --red:#FF003C; --orange:#FF6600; 
+  --purple:#BB00FF; --white:#FFFFFF;
+  --px:'Press Start 2P', monospace;
+}
+* { box-sizing:border-box; margin:0; padding:0; user-select:none; -webkit-tap-highlight-color:transparent; }
+@media(prefers-reduced-motion:reduce) { * { animation:none!important; transition:none!important; } }
+html, body { width:100%; height:100%; background:var(--black); color:var(--white); font-family:var(--px); overflow:hidden; touch-action:manipulation; }
+body::after { content:''; position:fixed; inset:0; background:repeating-linear-gradient(to bottom, transparent 0px, transparent 3px, rgba(0,255,255,0.03) 3px, rgba(0,0,0,0.15) 4px); pointer-events:none; z-index:900; }
+#stars { position:fixed; inset:0; z-index:0; overflow:hidden; }
+.star { position:absolute; background:#fff; border-radius:50%; animation:twinkle var(--d) ease-in-out infinite; }
+@keyframes twinkle { 0%, 100% { opacity:1; } 50% { opacity:0.1; } }
+#screen { position:relative; z-index:10; width:100vw; height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:0.75rem 0.75rem 2.5rem; overflow-y:auto; scroll-behavior:smooth; }
+.panel { display:none; flex-direction:column; align-items:center; width:100%; max-width:440px; text-align:center; animation:fi 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+.panel.active { display:flex; }
+@keyframes fi { from { opacity:0; transform:scale(0.95) translateY(10px); } to { opacity:1; transform:scale(1) translateY(0); } }
+.pbox { border:3px solid var(--aqua); box-shadow:0 0 0 3px var(--black), 0 0 0 6px var(--aqua3), 0 0 40px rgba(0,245,255,0.15); background:rgba(0,5,20,0.95); padding:1.2rem 1rem; width:100%; margin-bottom:0.65rem; border-radius:2px; }
+.pbox.y { border-color:var(--yellow); box-shadow:0 0 0 3px var(--black), 0 0 0 6px #443300, 0 0 40px rgba(255,215,0,0.12); }
+.pbox.g { border-color:var(--green); box-shadow:0 0 0 3px var(--black), 0 0 0 6px #003310, 0 0 40px rgba(0,255,65,0.12); }
+.pbox.r { border-color:var(--red); box-shadow:0 0 0 3px var(--black), 0 0 0 6px #440010, 0 0 40px rgba(255,0,60,0.12); }
+.pbox.o { border-color:var(--orange); box-shadow:0 0 0 3px var(--black), 0 0 0 6px #442200, 0 0 40px rgba(255,102,0,0.12); }
+.pbox.p { border-color:var(--purple); box-shadow:0 0 0 3px var(--black), 0 0 0 6px #330044, 0 0 40px rgba(187,0,255,0.12); }
+.ttl { font-size:clamp(0.6rem,2.8vw,0.8rem); color:var(--aqua); line-height:1.8; margin-bottom:0.6rem; text-shadow:0 0 10px var(--aqua); letter-spacing:0.05em; }
+.ttl.y { color:var(--yellow); text-shadow:0 0 10px var(--yellow); }
+.ttl.g { color:var(--green); text-shadow:0 0 10px var(--green); }
+.ttl.r { color:var(--red); text-shadow:0 0 10px var(--red); }
+.ttl.o { color:var(--orange); text-shadow:0 0 10px var(--orange); }
+.ttl.p { color:var(--purple); text-shadow:0 0 10px var(--purple); }
+.body { font-size:clamp(0.45rem,2.2vw,0.65rem); color:#ccd; line-height:2.2; margin-bottom:0.8rem; }
+.hi { color:var(--aqua); text-shadow:0 0 5px rgba(0,245,255,0.5); } 
+.hy { color:var(--yellow); text-shadow:0 0 5px rgba(255,215,0,0.5); } 
+.hg { color:var(--green); text-shadow:0 0 5px rgba(0,255,65,0.5); } 
+.ho { color:var(--orange); text-shadow:0 0 5px rgba(255,102,0,0.5); }
+.sprite { font-size:clamp(2.5rem,10vw,4rem); line-height:1; margin:0.5rem 0; display:block; filter:drop-shadow(0 0 10px rgba(255,255,255,0.3)); }
+.bob { animation:bob 1.5s ease-in-out infinite; }
+.spin { animation:sp 3s linear infinite; }
+.pulse { animation:pu 1.2s ease-in-out infinite; }
+@keyframes bob { 0%, 100% { transform:translateY(0) scale(1); } 50% { transform:translateY(-8px) scale(1.05); } }
+@keyframes sp { from { transform:rotate(0); } to { transform:rotate(360deg); } }
+@keyframes pu { 0%, 100% { transform:scale(1); filter:drop-shadow(0 0 10px var(--aqua)); } 50% { transform:scale(1.15); filter:drop-shadow(0 0 25px var(--white)); } }
+.btn { font-family:var(--px); font-size:clamp(0.45rem,2.2vw,0.65rem); padding:1em 1.2em; border:3px solid var(--aqua); background:var(--black); color:var(--aqua); cursor:pointer; width:100%; margin-top:0.5rem; letter-spacing:0.05em; min-height:55px; text-shadow:0 0 8px var(--aqua); box-shadow:inset 0 0 10px rgba(0,245,255,0.1), 0 0 15px rgba(0,245,255,0.2); transition:all 0.1s; touch-action:manipulation; text-transform:uppercase; }
+.btn:hover, .btn:active { background:var(--aqua); color:var(--black); text-shadow:none; box-shadow:0 0 25px var(--aqua); transform:scale(0.98); }
+.btn.y { border-color:var(--yellow); color:var(--yellow); text-shadow:0 0 8px var(--yellow); box-shadow:inset 0 0 10px rgba(255,215,0,0.1), 0 0 15px rgba(255,215,0,0.2); }
+.btn.y:hover, .btn.y:active { background:var(--yellow); color:var(--black); box-shadow:0 0 25px var(--yellow); }
+.btn.g { border-color:var(--green); color:var(--green); text-shadow:0 0 8px var(--green); box-shadow:inset 0 0 10px rgba(0,255,65,0.1), 0 0 15px rgba(0,255,65,0.2); }
+.btn.g:hover, .btn.g:active { background:var(--green); color:var(--black); box-shadow:0 0 25px var(--green); }
+.btn.r { border-color:var(--red); color:var(--red); text-shadow:0 0 8px var(--red); box-shadow:inset 0 0 10px rgba(255,0,60,0.1), 0 0 15px rgba(255,0,60,0.2); }
+.btn.r:hover, .btn.r:active { background:var(--red); color:var(--black); box-shadow:0 0 25px var(--red); }
+.btn.p { border-color:var(--purple); color:var(--purple); text-shadow:0 0 8px var(--purple); box-shadow:inset 0 0 10px rgba(187,0,255,0.1), 0 0 15px rgba(187,0,255,0.2); }
+.btn.p:hover, .btn.p:active { background:var(--purple); color:var(--black); box-shadow:0 0 25px var(--purple); }
+.mbox { background:#000a00; border:2px dashed var(--green); padding:1rem; margin:0.8rem 0; text-align:left; }
+.mhdr { font-size:clamp(0.4rem,1.9vw,0.55rem); color:var(--green); text-shadow:0 0 8px var(--green); margin-bottom:0.6rem; letter-spacing:0.05em; border-bottom:1px solid #003310; padding-bottom:0.4rem; }
+.mbox p, .mbox li { font-size:clamp(0.38rem,1.8vw,0.52rem); color:#aef; line-height:2.4; }
+.mbox ul { list-style:none; padding:0; }
+.mbox li::before { content:"▶ "; color:var(--green); }
+.mbox li { margin-bottom:0.5rem; }
+.morse-row { display:flex; gap:0.6rem; justify-content:center; flex-wrap:wrap; margin:0.8rem 0; }
+.tap-btn { font-family:var(--px); font-size:clamp(0.4rem,1.9vw,0.55rem); flex:1; min-height:70px; border:3px solid #334; background:#050510; color:#88a; cursor:pointer; transition:all 0.05s; touch-action:manipulation; border-radius:4px; }
+.tap-btn:active { background:var(--aqua); color:var(--black); border-color:var(--aqua); box-shadow:0 0 20px var(--aqua); transform:scale(0.95); }
+.morse-display { font-size:clamp(0.6rem,2.8vw,0.85rem); color:var(--aqua); letter-spacing:0.2em; margin:0.6rem 0; min-height:1.6rem; text-shadow:0 0 10px var(--aqua); background:#001122; padding:0.5rem; border:1px solid #003344; }
+.num-input { font-family:var(--px); font-size:clamp(1.2rem,5vw,1.6rem); background:#000; border:3px solid var(--aqua); color:var(--aqua); text-align:center; width:100%; padding:0.8em; margin:0.6rem 0; letter-spacing:0.1em; box-shadow:0 0 20px rgba(0,245,255,0.15); }
+.numpad { display:grid; grid-template-columns:repeat(3,1fr); gap:0.4rem; width:100%; margin:0.6rem 0; }
+.np { font-family:var(--px); font-size:clamp(0.65rem,3vw,0.9rem); padding:0.8em; border:2px solid #223; background:#0a0a15; color:#ccd; cursor:pointer; min-height:60px; touch-action:manipulation; transition:all 0.05s; border-radius:4px; }
+.np:active { border-color:var(--aqua); color:var(--black); background:var(--aqua); box-shadow:0 0 15px var(--aqua); transform:scale(0.92); }
+.np.wide { grid-column:span 3; } .np.dbl { grid-column:span 2; }
+.prog-wrap { width:100%; margin-bottom:0.8rem; }
+.prog-lbl { font-size:0.4rem; color:#667; margin-bottom:0.3rem; text-align:left; letter-spacing:0.05em; }
+.prog-track { width:100%; height:12px; background:#050510; border:2px solid #223; padding:1px; }
+.prog-fill { height:100%; background:var(--aqua); box-shadow:0 0 10px var(--aqua); transition:width 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+#flash { position:fixed; inset:0; background:var(--aqua); opacity:0; pointer-events:none; z-index:800; transition:opacity 0.05s; }
+#flash.on { opacity:0.3; }
+.score-hud { position:fixed; top:0.75rem; right:0.75rem; font-size:0.45rem; color:var(--yellow); z-index:200; text-shadow:0 0 10px var(--yellow); background:rgba(0,0,0,0.8); padding:0.4rem; border:2px solid #443300; border-radius:4px; }
+.sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+footer { position:fixed; bottom:0; font-size:0.3rem; color:#334; text-align:center; width:100%; z-index:100; padding:0.3rem; background:rgba(0,0,5,0.9); }
+.mandate { color:#886600; }
+.build-card { background:#05050a; border:3px solid var(--yellow); padding:1.2rem; margin:0.8rem 0; text-align:left; box-shadow:0 0 30px rgba(255,215,0,0.1); }
+.build-card h3 { font-size:clamp(0.45rem,2vw,0.6rem); color:var(--yellow); margin-bottom:0.8rem; line-height:1.8; text-shadow:0 0 10px var(--yellow); border-bottom:2px dashed #443300; padding-bottom:0.5rem; }
+.build-card li { font-size:clamp(0.38rem,1.8vw,0.52rem); color:#dda; line-height:2.2; list-style:none; margin-bottom:0.4rem; }
+.build-card li::before { content:"🧱 "; filter:drop-shadow(0 0 2px var(--yellow)); }
+</style>
+</head>
+<body>
+<div aria-live="assertive" aria-atomic="true" class="sr-only" id="sr"></div>
+<div id="flash" aria-hidden="true"></div>
+<div id="stars" aria-hidden="true"></div>
+<div class="score-hud" aria-live="polite" id="hud">★ 000</div>
+<div id="screen">
+
+<div class="panel active" id="s0" role="main" aria-labelledby="s0t">
+<div class="pbox">
+<div class="ttl" id="s0t" style="font-size:clamp(0.7rem,3.2vw,1rem);">★ DINO SPACE QUEST ★</div>
+<span class="sprite bob">🦕</span>
+<div class="body">
+<span class="hy">— BIRTHDAY MISSION —</span><br><br>
+YEAR 2099. A T-REX CAPTAIN<br>named REX-9 needs the world's<br>greatest puzzle brain.<br><br>
+This game will PAUSE<br>and send you into the<br><span class="hi">REAL WORLD</span> to find<br>objects and build things.<br><br>
+Come back. Unlock the ship.<br>Save the crew.<br><br>
+<span class="hy">Three puzzles. One mission.</span>
+</div>
+<button class="btn" onclick="initAudio(); go(1)" aria-label="Press start to begin">▶ PRESS START</button>
+</div>
+</div>
+
+<div class="panel" id="s1" aria-labelledby="s1t">
+<div class="prog-wrap"><div class="prog-lbl">MISSION PROGRESS</div><div class="prog-track"><div class="prog-fill" style="width:0%"></div></div></div>
+<div class="pbox">
+<div class="ttl" id="s1t">// INCOMING SIGNAL //</div>
+<span class="sprite bob">📡</span>
+<div class="body">
+REX-9's ship took a direct hit<br>from a meteor swarm.<br><br>
+His TREX-CORE shattered<br>into <span class="hi">3 fragments</span><br>scattered across the galaxy.<br><br>
+Each fragment is locked behind<br>a puzzle that needs<br><span class="hy">REAL OBJECTS</span> from your<br>world to solve.<br><br>
+The crew has 3 hours of air.<br><span class="hi">Move.</span>
+</div>
+<button class="btn" onclick="go(2)" aria-label="Accept mission">▶ ACCEPT MISSION</button>
+</div>
+</div>
+
+<div class="panel" id="s2" aria-labelledby="s2t">
+<div class="prog-wrap"><div class="prog-lbl">FRAGMENT 1 OF 3 ██░░░░░░░░</div><div class="prog-track"><div class="prog-fill" style="width:20%"></div></div></div>
+<div class="pbox o">
+<div class="ttl o" id="s2t">⚡ FRAGMENT 1: THE SOS SIGNAL</div>
+<span class="sprite bob">🔭</span>
+<div class="body">
+REX-9 is transmitting a distress<br>signal through the static.<br><br>
+It's a pattern of long and short pulses.<br>The pattern is:<br><br>
+<span class="ho" style="font-size:1.2em;letter-spacing:0.15em;background:#210;padding:0.2rem;">— — —  · · ·  — — —</span><br><br>
+That's morse code for <span class="hy">S.O.S.</span><br><br>
+To unlock Fragment 1 you must<br><span class="hi">BUILD this pattern yourself</span><br>using real objects from your house.<br>Then tap it on screen to prove it.
+</div>
+<button class="btn o" onclick="go(3)" aria-label="Get mission instructions for puzzle one">▶ GET THE MISSION</button>
+</div>
+</div>
+
+<div class="panel" id="s3" aria-labelledby="s3t">
+<div class="pbox o">
+<div class="ttl o" id="s3t">🔍 REAL WORLD MISSION 1</div>
+<div class="mbox">
+<div class="mhdr">▶ STEP 1 — FIND THESE</div>
+<ul><li>9 of the SAME object (q-tips, pencils, straws, sticks, lego pieces, coins — anything that looks the same)</li><li>A flat surface</li></ul>
+</div>
+<div class="mbox">
+<div class="mhdr">▶ STEP 2 — LAY THEM OUT</div>
+<p>Arrange them in three groups:<br><br>
+<span class="hi">GROUP 1: 3 items lying flat SIDE BY SIDE</span> (long dashes)<br><br>
+Leave a gap.<br><br>
+<span class="hy">GROUP 2: 3 items STACKED in a pile</span> (short dots)<br><br>
+Leave a gap.<br><br>
+<span class="hi">GROUP 3: 3 more items SIDE BY SIDE</span> (long dashes again)</p>
+</div>
+<div class="mbox">
+<div class="mhdr">▶ STEP 3 — COME BACK</div>
+<p>When it's built, tap the exact same pattern here: LONG LONG LONG, SHORT SHORT SHORT, LONG LONG LONG.</p>
+</div>
+<button class="btn o" onclick="go(4)" aria-label="I built it, go to tap input">▶ I BUILT IT — TAP IT IN</button>
+</div>
+</div>
+
+<div class="panel" id="s4" aria-labelledby="s4t">
+<div class="pbox o">
+<div class="ttl o" id="s4t">📻 TAP THE S.O.S.</div>
+<div class="body">Tap the pattern you built.<br><span class="hy">9 taps total.</span></div>
+<div class="morse-display" id="morse-display" aria-live="polite" aria-label="Tapped pattern">WAITING...</div>
+<div class="morse-row" role="group" aria-label="Morse tap buttons">
+<button class="tap-btn" onclick="morseTap('long')" aria-label="Tap long dash">━━<br>LONG</button>
+<button class="tap-btn" onclick="morseTap('short')" aria-label="Tap short dot">·<br>SHORT</button>
+</div>
+<div class="body" style="margin-top:0.4rem;">Tapped: <span class="hi" id="tap-count" style="font-size:1.2em;">0</span> / 9</div>
+<button class="btn r" onclick="resetMorse()" aria-label="Reset and start over" style="margin-top:1rem;">↺ RESET</button>
+</div>
+</div>
+
+<div class="panel" id="s5" aria-labelledby="s5w">
+<div class="pbox g">
+<div class="ttl g" id="s5w">✓ FRAGMENT 1 RECOVERED!</div>
+<span class="sprite pulse">💎</span>
+<div class="body">
+You tapped S.O.S. perfectly.<br>REX-9 locks onto the signal.<br>Fragment 1 breaks free<br>from the debris field.<br><br>
+<span class="hg">TREX-CORE: 33% restored.</span><br><br>
+<span class="hy">+300 POINTS</span><br><br>
+One T-Rex does a tiny<br>celebratory roar.<br>(His arms are too short to high-five.)
+</div>
+<button class="btn g" onclick="go(6)" aria-label="Continue to puzzle two">▶ FRAGMENT 2 DETECTED</button>
+</div>
+</div>
+
+<div class="panel" id="s6" aria-labelledby="s6t">
+<div class="prog-wrap"><div class="prog-lbl">FRAGMENT 2 OF 3 █████░░░░░</div><div class="prog-track"><div class="prog-fill" style="width:55%"></div></div></div>
+<div class="pbox r">
+<div class="ttl r" id="s6t">🔥 FRAGMENT 2: GRAVITY BALANCE</div>
+<span class="sprite spin">⚖️</span>
+<div class="body">
+Fragment 2 is trapped inside<br>an asteroid with a <span class="hi">gravity lock.</span><br><br>
+The lock only releases when<br>a perfect weight balance<br>is achieved.<br><br>
+REX-9 literally cannot reach<br>the controls. His arms.<br>You know.<br><br>
+<span class="hy">You build a balance in YOUR world.<br>That unlocks it in his.</span><br><br>
+This one — <span class="hi">get your dad.</span><br>You're going to need a second set of hands.
+</div>
+<button class="btn r" onclick="go(7)" aria-label="Get mission instructions for puzzle two">▶ GET THE MISSION</button>
+</div>
+</div>
+
+<div class="panel" id="s7" aria-labelledby="s7t">
+<div class="pbox r">
+<div class="ttl r" id="s7t">🔍 REAL WORLD MISSION 2</div>
+<div class="mbox">
+<div class="mhdr">▶ FIND THESE</div>
+<ul>
+<li>A ruler OR a long flat stick OR stiff cardboard</li>
+<li>Something to balance it across — a pencil, stack of 3 coins, a folded eraser</li>
+<li>Small objects for weight — coins, legos, rocks, batteries</li>
+<li>Your dad (seriously — go get him)</li>
+</ul>
+</div>
+<div class="mbox">
+<div class="mhdr">▶ BUILD IT</div>
+<p>Balance the ruler across your pivot point like a seesaw.<br><br>Add objects to BOTH ends until it sits perfectly flat and level.<br><br><span class="hg">The objects don't have to match. A heavy thing on one side can balance multiple light things on the other.</span><br><br>When it's balanced — count EVERY object you used on BOTH sides combined.</p>
+</div>
+<button class="btn r" onclick="go(8)" aria-label="I balanced it, go to enter the number">▶ I BALANCED IT</button>
+</div>
+</div>
+
+<div class="panel" id="s8" aria-labelledby="s8t">
+<div class="pbox r">
+<div class="ttl r" id="s8t">⚖️ HOW MANY OBJECTS TOTAL?</div>
+<div class="body">Count every object on BOTH sides.<br>Enter that total.<br><br><span class="hi">Any number from 2 to 20 is valid.<br>Every balance is different.</span></div>
+<div id="bal-viz" style="font-size:clamp(1.5rem,6vw,2rem);margin:0.5rem 0;filter:drop-shadow(0 0 10px rgba(255,255,255,0.2));">⚖️</div>
+<input type="text" class="num-input" id="balance-input" inputmode="numeric" maxlength="2" aria-label="Total objects used" placeholder="?" readonly>
+<div class="numpad" role="group" aria-label="Number pad">
+<button class="np" onclick="np('1')" aria-label="1">1</button>
+<button class="np" onclick="np('2')" aria-label="2">2</button>
+<button class="np" onclick="np('3')" aria-label="3">3</button>
+<button class="np" onclick="np('4')" aria-label="4">4</button>
+<button class="np" onclick="np('5')" aria-label="5">5</button>
+<button class="np" onclick="np('6')" aria-label="6">6</button>
+<button class="np" onclick="np('7')" aria-label="7">7</button>
+<button class="np" onclick="np('8')" aria-label="8">8</button>
+<button class="np" onclick="np('9')" aria-label="9">9</button>
+<button class="np dbl" onclick="np('0')" aria-label="0">0</button>
+<button class="np" onclick="npDel()" aria-label="Delete" style="color:var(--red);">⌫</button>
+<button class="np wide g btn" onclick="submitBalance()" aria-label="Submit answer" style="margin-top:0.2rem;">▶ SUBMIT</button>
+</div>
+</div>
+</div>
+
+<div class="panel" id="s9" aria-labelledby="s9w">
+<div class="pbox g">
+<div class="ttl g" id="s9w">✓ GRAVITY LOCK BROKEN!</div>
+<span class="sprite pulse">💎</span>
+<div class="body">
+<span class="hy" id="used-count" style="font-size:1.2em;">?</span> objects.<br>That's all it took to crack a lock that stumped engineers for 200 years.<br><br>
+<span class="hg">TREX-CORE: 66% restored.</span><br><br>
+<span class="hy">+300 POINTS</span><br><br>
+REX-9 cries exactly one tear.<br>It floats away in zero gravity<br>and becomes a tiny comet.
+</div>
+<button class="btn g" onclick="go(10)" aria-label="Continue to the final puzzle">▶ FINAL FRAGMENT INCOMING</button>
+</div>
+</div>
+
+<div class="panel" id="s10" aria-labelledby="s10t">
+<div class="prog-wrap"><div class="prog-lbl">FRAGMENT 3 OF 3 █████████░</div><div class="prog-track"><div class="prog-fill" style="width:85%"></div></div></div>
+<div class="pbox p">
+<div class="ttl p" id="s10t">🌀 FRAGMENT 3: THE STAR MAP VAULT</div>
+<span class="sprite spin">🪐</span>
+<div class="body">
+The final fragment is sealed inside<br>a vault that speaks only in<br><span class="hi">SHAPES AND NUMBERS.</span><br><br>
+The vault AI says:<br><br>
+<span style="color:var(--purple);font-size:0.95em;background:#102;padding:0.4rem;display:inline-block;border:1px dashed var(--purple);">"Prove you can build<br>the map. Then tell me<br>what's inside it.<br>Only then does the<br>vault open."</span><br><br>
+Get paper. Get a pencil.<br><span class="hy">Don't rush this one.</span>
+</div>
+<button class="btn p" onclick="go(11)" aria-label="Get the final mission instructions">▶ GET THE MISSION</button>
+</div>
+</div>
+
+<div class="panel" id="s11" aria-labelledby="s11t">
+<div class="pbox p">
+<div class="ttl p" id="s11t">🔍 REAL WORLD MISSION 3</div>
+<div class="mbox">
+<div class="mhdr">▶ FIND THESE</div>
+<ul><li>One piece of paper</li><li>A pencil or pen</li></ul>
+</div>
+<div class="mbox">
+<div class="mhdr">▶ BUILD THE STAR MAP</div>
+<p>
+Draw a TRIANGLE anywhere on the paper.<br><br>
+Draw a CIRCLE around it so the whole triangle is inside the circle.<br><br>
+Inside the triangle, write down two things:<br><br>
+<span class="hi">1. How many SIDES does your triangle have?</span><br><br>
+<span class="hy">2. How many CORNERS does your triangle have?</span><br><br>
+Both numbers are the same.<br>That number is the vault code.
+</p>
+</div>
+<div class="mbox">
+<div class="mhdr">▶ WHY IT'S ALWAYS THE SAME</div>
+<p>Every triangle ever drawn has 3 sides and 3 corners. Big, small, or skinny. <span class="hg">Always 3.</span> You just proved you know the universal rule.</p>
+</div>
+<button class="btn p" onclick="go(12)" aria-label="I drew it, go enter the vault code">▶ I DREW IT — ENTER THE CODE</button>
+</div>
+</div>
+
+<div class="panel" id="s12" aria-labelledby="s12t">
+<div class="pbox p">
+<div class="ttl p" id="s12t">🔐 ENTER THE VAULT CODE</div>
+<div class="body">Look at your drawing.<br>How many corners does<br>your triangle have?</div>
+<input type="text" class="num-input" id="vault-input" inputmode="numeric" maxlength="1" aria-label="Vault code — number of corners on triangle" placeholder="?" readonly style="border-color:var(--purple);color:var(--purple);box-shadow:0 0 20px rgba(187,0,255,0.2);">
+<div class="numpad" role="group" aria-label="Vault code number pad">
+<button class="np" onclick="vp('1')" aria-label="1">1</button>
+<button class="np" onclick="vp('2')" aria-label="2">2</button>
+<button class="np" onclick="vp('3')" aria-label="3">3</button>
+<button class="np" onclick="vp('4')" aria-label="4">4</button>
+<button class="np" onclick="vp('5')" aria-label="5">5</button>
+<button class="np" onclick="vp('6')" aria-label="6">6</button>
+<button class="np" onclick="vp('7')" aria-label="7">7</button>
+<button class="np" onclick="vp('8')" aria-label="8">8</button>
+<button class="np" onclick="vp('9')" aria-label="9">9</button>
+<button class="np wide" onclick="vpDel()" aria-label="Delete" style="color:var(--red);">⌫ DELETE</button>
+<button class="np wide btn p" onclick="submitVault()" aria-label="Open vault" style="margin-top:0.2rem;">▶ OPEN VAULT</button>
+</div>
+<div id="vault-err" class="body" style="color:var(--red);display:none;margin-top:0.6rem;background:#300;padding:0.4rem;border:1px solid var(--red);">✗ VAULT REJECTED.<br>Count the corners carefully.</div>
+</div>
+</div>
+
+<div class="panel" id="s13" aria-labelledby="s13w">
+<div style="overflow-y:auto;max-height:85vh;width:100%;max-width:440px;padding-right:0.2rem;">
+<div class="pbox" style="margin-bottom:0.8rem;">
+<div class="ttl" style="font-size:clamp(0.6rem,2.8vw,0.8rem);">★★★ TREX-CORE RESTORED ★★★</div>
+<span class="sprite pulse">🦕🚀</span>
+<div class="body">
+All three fragments locked in.<br>The TREX-CORE hums to life.<br><br>
+REX-9 fires the engines.<br>Fourteen dinosaurs howling<br>through the vacuum of space.<br><br>
+<span class="hi">FINAL SCORE:</span> <span class="hy" id="final-score" style="font-size:1.4em;">000</span><br><br>
+<span class="hg" style="font-size:1.1em;border-bottom:2px solid var(--green);padding-bottom:0.2rem;">MISSION STATUS: COMPLETE.</span>
+</div>
+</div>
+
+<div class="pbox y" style="margin-bottom:0.8rem;text-align:left;">
+<div class="ttl y" style="font-size:clamp(0.45rem,2vw,0.6rem);">// TRANSMISSION FROM EARTH //</div>
+<div class="body" style="margin-top:0.6rem;">
+Hey — it's Uncle Jerry.<br><br>
+I missed your birthday and<br>I'm not gonna act like I didn't.<br>That was on me. I'm sorry.<br><br>
+But here's what I know:<br><br>
+<span class="hi">You built morse code with your hands.</span><br>
+<span class="hy">You solved a gravity balance.</span><br>
+<span class="hg">You drew a star map from scratch.</span><br><br>
+Most adults quit at puzzle one.<br>You went all the way through.<br><br>
+You're 9 and you're already<br>built different.<br><br>
+<span class="hi">Happy Birthday, kid.</span><br>— Uncle Jerry
+</div>
+</div>
+
+<div class="build-card" role="note" aria-labelledby="bc-title">
+<h3 id="bc-title">🧱 BONUS MISSION — BUILD WITH DAD</h3>
+<div style="font-size:clamp(0.35rem,1.6vw,0.5rem);color:#aa9;line-height:2.4;margin-bottom:0.6rem;background:#221;padding:0.4rem;border-left:3px solid var(--yellow);">No kit. No instructions. 45 minutes. Both of you.</div>
+<ul>
+<li>BUILD: A dinosaur spaceship</li>
+<li>MUST HAVE: a cockpit the pilot sits in</li>
+<li>MUST HAVE: an engine</li>
+<li>MUST HAVE: one hidden secret compartment</li>
+<li>MUST HAVE: a name for the ship</li>
+<li>WHEN DONE: photo it. Send it to Uncle Jerry.</li>
+</ul>
+<div style="font-size:clamp(0.3rem,1.4vw,0.45rem);color:#776;margin-top:0.8rem;line-height:2.4;border-top:1px solid #332;padding-top:0.4rem;">* No Lego? Cardboard. Tape. Tinfoil. Sticks. Whatever you've got. The material doesn't matter. The build does.</div>
+</div>
+
+<button class="btn y" onclick="resetGame()" aria-label="Play again" style="margin-bottom:1.5rem;">↺ PLAY AGAIN</button>
+</div>
+</div>
+
+</div><footer role="contentinfo">FOS MASTER LLC &nbsp;|&nbsp;<span class="mandate">10% GROSS → PEDIATRIC CANCER RESEARCH</span></footer>
+
+<script>
+// AUDIO SYNTH (Zero Dependency)
+let actx = null;
+function initAudio() {
+  if(!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
+  if(actx.state === 'suspended') actx.resume();
+}
+function beep(f, type, dur, vol=0.1) {
+  if(!actx) return;
+  const osc = actx.createOscillator();
+  const gain = actx.createGain();
+  osc.type = type; osc.frequency.setValueAtTime(f, actx.currentTime);
+  gain.gain.setValueAtTime(vol, actx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.01, actx.currentTime + dur);
+  osc.connect(gain); gain.connect(actx.destination);
+  osc.start(); osc.stop(actx.currentTime + dur);
+}
+function playChime() { [523.25, 659.25, 783.99, 1046.50].forEach((f,i)=>setTimeout(()=>beep(f,'square',0.15,0.05),i*120)); }
+function playError() { beep(150, 'sawtooth', 0.4, 0.15); setTimeout(()=>beep(120, 'sawtooth', 0.4, 0.15), 150); }
+
+// STARS
+(function(){
+  const el=document.getElementById('stars');
+  for(let i=0;i<120;i++){
+    const s=document.createElement('div'),sz=Math.random()<0.8?1:2;
+    s.className='star';
+    s.style.cssText=`width:${sz}px;height:${sz}px;top:${Math.random()*100}%;left:${Math.random()*100}%;--d:${(1.5+Math.random()*3).toFixed(1)}s;animation-delay:${(Math.random()*4).toFixed(1)}s;`;
+    el.appendChild(s);
+  }
+})();
+
+// GYRO
+if(window.DeviceOrientationEvent){
+  window.addEventListener('deviceorientation',e=>{
+    const tx=Math.max(-15,Math.min(15,(e.gamma||0)*0.25));
+    const ty=Math.max(-15,Math.min(15,(e.beta||0)*0.2));
+    document.getElementById('stars').style.transform=`translate(${tx}px,${ty}px)`;
+  },{passive:true});
+}
+
+// STATE
+let score=0; let morseSeq=[]; let morseSyms=[];
+const SOS=['long','long','long','short','short','short','long','long','long'];
+let balVal=''; let vaultVal='';
+
+// NAV
+function go(n){
+  if(n>0) beep(440+(n*20), 'square', 0.1, 0.05);
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  const next=document.getElementById('s'+n);
+  if(!next)return;
+  next.classList.add('active');
+  document.getElementById('screen').scrollTo(0,0);
+  doFlash(); vibe(30);
+  const msgs={0:'Title.',1:'Mission briefing.',2:'Puzzle one: SOS signal.',3:'Real world mission one.',4:'Tap the morse pattern.',5:'Fragment one recovered!',6:'Puzzle two: gravity balance.',7:'Real world mission two. Get your dad.',8:'Enter how many objects you used.',9:'Fragment two recovered!',10:'Final puzzle: the star map vault.',11:'Real world mission three. Get paper and a pencil.',12:'Enter the vault code.',13:'Mission complete! Read your birthday message.'};
+  sr(msgs[n]||'');
+  if(n===13) { document.getElementById('final-score').textContent=String(score).padStart(3,'0'); playChime(); setTimeout(playChime, 600); }
+}
+
+function doFlash(c){
+  const f=document.getElementById('flash');
+  f.style.background=c||'#00F5FF';
+  f.classList.add('on');
+  setTimeout(()=>f.classList.remove('on'),100);
+}
+
+function vibe(p){ if(navigator.vibrate) navigator.vibrate(p); }
+
+function addScore(n){
+  score+=n;
+  document.getElementById('hud').textContent='★ '+String(score).padStart(3,'0');
+}
+
+function sr(msg){
+  const el=document.getElementById('sr');
+  el.textContent='';
+  setTimeout(()=>el.textContent=msg,50);
+}
+
+// PUZZLE 1
+function morseTap(type){
+  if(morseSeq.length>=9)return;
+  morseSeq.push(type); morseSyms.push(type==='long'?'━':'·');
+  updateMorse();
+  vibe(type==='long'?[110]:35);
+  beep(type==='long'?330:660, 'sine', type==='long'?0.3:0.1, 0.1);
+  doFlash(type==='long'?'#FF6600':'#00AACC');
+  sr(type==='long'?'Long dash':'Short dot');
+  if(morseSeq.length===9)setTimeout(checkMorse,500);
+}
+
+function updateMorse(){
+  const g=[morseSyms.slice(0,3).join(' '),morseSyms.slice(3,6).join(' '),morseSyms.slice(6,9).join(' ')].filter(x=>x).join('   ');
+  document.getElementById('morse-display').textContent=g||'WAITING...';
+  document.getElementById('tap-count').textContent=morseSeq.length;
+}
+
+function checkMorse(){
+  if(morseSeq.every((v,i)=>v===SOS[i])){
+    addScore(300); vibe([80,40,80,40,200]); doFlash('#00FF41'); playChime();
+    sr('Correct! S.O.S. confirmed. Fragment one unlocked.');
+    setTimeout(()=>go(5),800);
+  } else {
+    vibe([200,100,200]); doFlash('#FF003C'); playError();
+    sr('Wrong pattern. Resetting.');
+    setTimeout(resetMorse,800);
+  }
+}
+
+function resetMorse(){
+  morseSeq=[]; morseSyms=[]; updateMorse(); beep(220, 'square', 0.1);
+  sr('Reset. Tap again.');
+}
+
+// PUZZLE 2
+function np(d){
+  if(balVal.length>=2)return;
+  balVal+=d;
+  document.getElementById('balance-input').value=balVal;
+  vibe(20); beep(880, 'square', 0.05);
+  const n=parseInt(balVal)||0;
+  document.getElementById('bal-viz').textContent=n>=10?'⚖️🤩':n>=6?'⚖️😮':n>=3?'⚖️🙂':'⚖️';
+}
+
+function npDel(){
+  balVal=balVal.slice(0,-1);
+  document.getElementById('balance-input').value=balVal||'';
+  document.getElementById('bal-viz').textContent='⚖️';
+  vibe(15); beep(330, 'square', 0.05);
+}
+
+function submitBalance(){
+  const val=parseInt(balVal);
+  if(!val||val<2||val>20){ vibe([200]); doFlash('#FF003C'); playError(); sr('Enter a number between 2 and 20.'); return; }
+  document.getElementById('used-count').textContent=val+' objects';
+  addScore(300); vibe([80,40,80,40,200]); doFlash('#00FF41'); playChime();
+  sr('Gravity lock broken! Fragment two unlocked.');
+  setTimeout(()=>go(9),800);
+}
+
+// PUZZLE 3
+function vp(d){
+  vaultVal=d;
+  document.getElementById('vault-input').value=vaultVal;
+  document.getElementById('vault-err').style.display='none';
+  vibe(20); beep(880, 'square', 0.05);
+}
+
+function vpDel(){
+  vaultVal='';
+  document.getElementById('vault-input').value='';
+  document.getElementById('vault-err').style.display='none';
+  vibe(15); beep(330, 'square', 0.05);
+}
+
+function submitVault(){
+  if(parseInt(vaultVal)===3){
+    addScore(300); vibe([80,40,80,40,80,40,300]); doFlash('#00FF41'); playChime();
+    sr('Vault code accepted. Fragment three unlocked.');
+    setTimeout(()=>go(13),800);
+  } else {
+    vibe([200,100,200]); doFlash('#FF003C'); playError();
+    document.getElementById('vault-err').style.display='block';
+    sr('Wrong code. Count the corners on your drawing again.');
+    vaultVal=''; document.getElementById('vault-input').value='';
+  }
+}
+
+// RESET
+function resetGame(){
+  score=0; morseSeq=[]; morseSyms=[]; balVal=''; vaultVal='';
+  document.getElementById('hud').textContent='★ 000';
+  document.getElementById('balance-input').value='';
+  document.getElementById('vault-input').value='';
+  document.getElementById('vault-err').style.display='none';
+  updateMorse();
+  go(0);
+}
+
+// INIT
+window.addEventListener('load',()=>{
+  sr('Dino Space Quest loaded. Press start to begin.');
+});
+</script>
+</body>
+</html>
 
